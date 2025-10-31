@@ -21,7 +21,7 @@ MODEL_PATH = '/home/data/dataset/huggingface/VLMs/deepseek-ai/DeepSeek-OCR' # ch
 # .jpg, .png, .jpeg: run_dpsk_ocr_image.py; 
 # Omnidocbench images path: run_dpsk_ocr_eval_batch.py
 
-INPUT_PATH = '/home/users/lduignan/projects/open-edu-4-data-gen/sources/sesamath/downloads/Cahier_Sésamath_6e_2025/cahier_2025_5e_N2_s1.pdf' 
+INPUT_PATH = '/home/users/lduignan/projects/open-edu-4-data-gen/sources/sesamath/downloads/Cahier_Sésamath_6e_2025/cahier_2025_6e_N2_cours.pdf' 
 OUTPUT_PATH = '/home/users/lduignan/experiments/deepseek-ocr/sesamath'
 
 PROMPT = '<image>\n<|grounding|>Convert the document to markdown.'
