@@ -3,6 +3,7 @@ import fitz
 import img2pdf
 import io
 import re
+import argparse
 from tqdm import tqdm
 import torch
 from concurrent.futures import ThreadPoolExecutor
@@ -14,7 +15,7 @@ os.environ['VLLM_USE_V1'] = '0'
 os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
 
-from config import MODEL_PATH, INPUT_PATH, OUTPUT_PATH, PROMPT, SKIP_REPEAT, MAX_CONCURRENCY, NUM_WORKERS, CROP_MODE
+# from config import MODEL_PATH, INPUT_PATH, OUTPUT_PATH, PROMPT, SKIP_REPEAT, MAX_CONCURRENCY, NUM_WORKERS, CROP_MODE
 
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
@@ -27,6 +28,51 @@ from process.ngram_norepeat import NoRepeatNGramLogitsProcessor
 from process.image_process import DeepseekOCRProcessor
 
 ModelRegistry.register_model("DeepseekOCRForCausalLM", DeepseekOCRForCausalLM)
+
+
+# TODO: change modes
+# Tiny: base_size = 512, image_size = 512, crop_mode = False
+# Small: base_size = 640, image_size = 640, crop_mode = False
+# Base: base_size = 1024, image_size = 1024, crop_mode = False
+# Large: base_size = 1280, image_size = 1280, crop_mode = False
+# Gundam: base_size = 1024, image_size = 640, crop_mode = True
+
+BASE_SIZE = 1024
+IMAGE_SIZE = 640
+CROP_MODE = True
+MIN_CROPS= 2
+MAX_CROPS= 6 # max:9; If your GPU memory is small, it is recommended to set it to 6.
+MAX_CONCURRENCY = 100 # If you have limited GPU memory, lower the concurrency count.
+NUM_WORKERS = 64 # image pre-process (resize/padding) workers 
+PRINT_NUM_VIS_TOKENS = False
+SKIP_REPEAT = True
+MODEL_PATH = '/home/data/dataset/huggingface/VLMs/deepseek-ai/DeepSeek-OCR' # change to your model path
+
+# TODO: change INPUT_PATH
+# .pdf: run_dpsk_ocr_pdf.py; 
+# .jpg, .png, .jpeg: run_dpsk_ocr_image.py; 
+# Omnidocbench images path: run_dpsk_ocr_eval_batch.py
+
+# INPUT_PATH = '/home/users/lduignan/projects/open-edu-4-data-gen/sources/sesamath/downloads/Cahier_Sésamath_6e_2025/cahier_2025_6e_N2_cours.pdf' 
+# OUTPUT_PATH = '/home/users/lduignan/experiments/deepseek-ocr/sesamath'
+
+PROMPT = '<image>\n<|grounding|>Convert the document to markdown.'
+# PROMPT = '<image>\nFree OCR.'
+# TODO commonly used prompts
+# document: <image>\n<|grounding|>Convert the document to markdown.
+# other image: <image>\n<|grounding|>OCR this image.
+# without layouts: <image>\nFree OCR.
+# figures in document: <image>\nParse the figure.
+# general: <image>\nDescribe this image in detail.
+# rec: <image>\nLocate <|ref|>xxxx<|/ref|> in the image.
+# '先天下之忧而忧'
+# .......
+
+
+from transformers import AutoTokenizer
+
+TOKENIZER = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
+
 
 
 llm = LLM(
@@ -232,13 +278,18 @@ def process_single_image(image):
 
 if __name__ == "__main__":
 
-    os.makedirs(OUTPUT_PATH, exist_ok=True)
-    os.makedirs(f'{OUTPUT_PATH}/images', exist_ok=True)
+    parser = argparse.ArgumentParser(description="DeepSeek-OCR PDF Processing")
+    parser.add_argument("--input_path", type=str, required=True, help="Path to the input PDF file")
+    parser.add_argument("--output_path", type=str, required=True, help="Path to the output directory")
+    args = parser.parse_args()  
+
+    os.makedirs(args.input_path, exist_ok=True)
+    os.makedirs(f'{args.outout_path}/images', exist_ok=True)
     
     print(f'{Colors.RED}PDF loading .....{Colors.RESET}')
 
 
-    images = pdf_to_images_high_quality(INPUT_PATH)
+    images = pdf_to_images_high_quality(args.input_path)
 
 
     prompt = PROMPT
@@ -295,7 +346,7 @@ if __name__ == "__main__":
         
         page_num = f'\n<--- Page Split --->'
 
-        contents_det += content + f'\n{page_num}\n'
+        # contents_det += content + f'\n{page_num}\n'
 
         image_draw = img.copy()
 
