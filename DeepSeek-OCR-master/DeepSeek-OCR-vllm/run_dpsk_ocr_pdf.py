@@ -283,13 +283,16 @@ if __name__ == "__main__":
     parser.add_argument("--output_path", type=str, required=True, help="Path to the output directory")
     args = parser.parse_args()  
 
-    os.makedirs(args.input_path, exist_ok=True)
-    os.makedirs(f'{args.outout_path}/images', exist_ok=True)
+    INPUT_PATH = args.input_path
+    OUTPUT_PATH = args.output_path
+
+    os.makedirs(INPUT_PATH, exist_ok=True)
+    os.makedirs(f'{OUTPUT_PATH}/images', exist_ok=True)
     
     print(f'{Colors.RED}PDF loading .....{Colors.RESET}')
 
 
-    images = pdf_to_images_high_quality(args.input_path)
+    images = pdf_to_images_high_quality(INPUT_PATH)
 
 
     prompt = PROMPT
