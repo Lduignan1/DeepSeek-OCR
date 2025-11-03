@@ -30,7 +30,7 @@ echo "Starting OCR batch processing..."
 shopt -s nullglob
 for pdf_file in "$INPUT_DIR"/*.pdf; do
     echo " Running OCR on $(basename "$pdf_file")"
-    python "$PYTHON_SCRIPT" --input_path "$pdf_file" --output_path "$out_subdir"
+    python "$PYTHON_SCRIPT" --input-path "$pdf_file" --output-path "$OUTPUT_DIR"
 done
     
 

@@ -26,7 +26,7 @@ PYTHON_SCRIPT="/home/users/lduignan/projects/DeepSeek-OCR/DeepSeek-OCR-master/De
 echo "Starting OCR batch processing..."
 
 
-python "$PYTHON_SCRIPT" --input-path "$pdf_file" --output-path "$out_subdir"
+python "$PYTHON_SCRIPT" --input-path "$INPUT_DIR" --output-path "$OUTPUT_DIR"
 
     
 echo "All OCR tasks completed."
