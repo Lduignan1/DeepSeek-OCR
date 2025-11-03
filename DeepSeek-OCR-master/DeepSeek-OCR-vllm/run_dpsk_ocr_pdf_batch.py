@@ -294,7 +294,7 @@ def process_pdf(llm, input_path, output_path):
     images = pdf_to_images_high_quality(input_path)
 
 
-    # prompt = PROMPT
+    
 
     # batch_inputs = []
 
@@ -387,6 +387,8 @@ if __name__ == "__main__":
     parser.add_argument("--output-path", type=str, required=True, help="Path to the output directory")
     args = parser.parse_args()  
 
+
+    prompt = PROMPT
 
 
     llm = LLM(
