@@ -279,14 +279,14 @@ def process_single_image(image):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="DeepSeek-OCR PDF Processing")
-    parser.add_argument("--input_path", type=str, required=True, help="Path to the input PDF file")
-    parser.add_argument("--output_path", type=str, required=True, help="Path to the output directory")
+    parser.add_argument("--input-path", type=str, required=True, help="Path to the input PDF file")
+    parser.add_argument("--output-path", type=str, required=True, help="Path to the output directory")
     args = parser.parse_args()  
 
     INPUT_PATH = args.input_path
     OUTPUT_PATH = args.output_path
 
-    os.makedirs(INPUT_PATH, exist_ok=True)
+    os.makedirs(OUTPUT_PATH, exist_ok=True)
     os.makedirs(f'{OUTPUT_PATH}/images', exist_ok=True)
     
     print(f'{Colors.RED}PDF loading .....{Colors.RESET}')
