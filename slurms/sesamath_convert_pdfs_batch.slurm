@@ -17,8 +17,8 @@ conda activate deepseek-ocr
 
 
 # ---- Paths ----
-INPUT_DIR="/home/users/lduignan/projects/open-edu-4-data-gen/sources/sesamath/downloads/Cahier_Sésamath_CM1" 
-OUTPUT_DIR="/home/users/lduignan/experiments/deepseek-ocr/sesamath/Cahier_Sésamath_CM1_modif"
+INPUT_DIR="/home/users/lduignan/projects/open-edu-4-data-gen/sources/sesamath/downloads" 
+OUTPUT_DIR="/home/users/lduignan/experiments/deepseek-ocr/sesamath"
 PYTHON_SCRIPT="/home/users/lduignan/projects/DeepSeek-OCR/DeepSeek-OCR-master/DeepSeek-OCR-vllm/run_dpsk_ocr_pdf_batch.py"
 
 
