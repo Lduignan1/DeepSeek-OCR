@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=deepseek-ocr-sesamath
+#SBATCH --job-name=deepseek-ocr-sesamath-test
 #SBATCH --output=/home/users/lduignan/experiments/deepseek-ocr/results/logs/%x_%j.out
 #SBATCH --error=/home/users/lduignan/experiments/deepseek-ocr/results/logs/%x_%j.err
 #SBATCH --partition=gpu40G
@@ -29,7 +29,7 @@ echo "Starting OCR batch processing..."
 # Loop over all PDF files in this directory
 shopt -s nullglob
 for pdf_file in "$INPUT_DIR"/*.pdf; do
-    echo "  Running OCR on $(basename "$pdf_file")"
+    echo " Running OCR on $(basename "$pdf_file")"
     python "$PYTHON_SCRIPT" --input_path "$pdf_file" --output_path "$out_subdir"
 done
     

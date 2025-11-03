@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=deepseek-ocr-sesamath
+#SBATCH --job-name=deepseek-ocr-sesamath-test-modif
 #SBATCH --output=/home/users/lduignan/experiments/deepseek-ocr/results/logs/%x_%j.out
 #SBATCH --error=/home/users/lduignan/experiments/deepseek-ocr/results/logs/%x_%j.err
 #SBATCH --partition=gpu40G
@@ -18,7 +18,7 @@ conda activate deepseek-ocr
 
 # ---- Paths ----
 INPUT_DIR="/home/users/lduignan/projects/open-edu-4-data-gen/sources/sesamath/downloads/Cahier_Sésamath_CM1" 
-OUTPUT_DIR="/home/users/lduignan/experiments/deepseek-ocr/sesamath/Cahier_Sésamath_CM1"
+OUTPUT_DIR="/home/users/lduignan/experiments/deepseek-ocr/sesamath/Cahier_Sésamath_CM1_modif"
 PYTHON_SCRIPT="/home/users/lduignan/projects/DeepSeek-OCR/DeepSeek-OCR-master/DeepSeek-OCR-vllm/run_dpsk_ocr_pdf_batch.py"
 
 
@@ -26,7 +26,7 @@ PYTHON_SCRIPT="/home/users/lduignan/projects/DeepSeek-OCR/DeepSeek-OCR-master/De
 echo "Starting OCR batch processing..."
 
 
-python "$PYTHON_SCRIPT" --input_path "$pdf_file" --output_path "$out_subdir"
+python "$PYTHON_SCRIPT" --input-path "$pdf_file" --output-path "$out_subdir"
 
     
 echo "All OCR tasks completed."
