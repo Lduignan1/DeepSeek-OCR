@@ -368,7 +368,7 @@ if __name__ == "__main__":
             content = content.replace(a_match_other, '').replace('\\coloneqq', ':=').replace('\\eqqcolon', '=:').replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')
 
 
-        contents += content + f'\n{page_num}\n'
+        #contents += content + f'\n{page_num}\n'
 
 
         jdx += 1
