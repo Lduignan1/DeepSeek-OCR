@@ -37,7 +37,7 @@ for subdir in "$INPUT_DIR"/*; do
         shopt -s nullglob
         for pdf_file in "$subdir"/*.pdf; do
             echo "  Running OCR on $(basename "$pdf_file")"
-            python "$PYTHON_SCRIPT" --input_path "$pdf_file" --output_path "$out_subdir"
+            python "$PYTHON_SCRIPT" --input-path "$pdf_file" --output-path "$out_subdir"
         done
     fi
 done

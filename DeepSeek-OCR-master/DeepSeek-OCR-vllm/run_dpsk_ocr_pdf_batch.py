@@ -403,10 +403,10 @@ if __name__ == "__main__":
         disable_mm_preprocessor_cache=True
     )
 
-    pdf_files = sorted(Path(args.input_dir).rglob("*.pdf"))
+    pdf_files = sorted(Path(args.input_path).rglob("*.pdf"))
     for pdf_path in pdf_files:
         subdir_name = pdf_path.parent.name
-        out_subdir = Path(args.output_dir) / subdir_name
+        out_subdir = Path(args.output_path) / subdir_name
         out_subdir.mkdir(parents=True, exist_ok=True)
         process_pdf(llm, str(pdf_path), str(out_subdir))
 
