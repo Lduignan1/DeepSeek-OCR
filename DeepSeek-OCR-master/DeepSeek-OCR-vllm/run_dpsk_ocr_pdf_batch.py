@@ -4,6 +4,7 @@ import img2pdf
 import io
 import re
 import argparse
+from pathlib import Path
 from tqdm import tqdm
 import torch
 from concurrent.futures import ThreadPoolExecutor
@@ -75,19 +76,19 @@ TOKENIZER = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
 
 
 
-llm = LLM(
-    model=MODEL_PATH,
-    hf_overrides={"architectures": ["DeepseekOCRForCausalLM"]},
-    block_size=256,
-    enforce_eager=False,
-    trust_remote_code=True, 
-    max_model_len=8192,
-    swap_space=0,
-    max_num_seqs=MAX_CONCURRENCY,
-    tensor_parallel_size=1,
-    gpu_memory_utilization=0.9,
-    disable_mm_preprocessor_cache=True
-)
+# llm = LLM(
+#     model=MODEL_PATH,
+#     hf_overrides={"architectures": ["DeepseekOCRForCausalLM"]},
+#     block_size=256,
+#     enforce_eager=False,
+#     trust_remote_code=True, 
+#     max_model_len=8192,
+#     swap_space=0,
+#     max_num_seqs=MAX_CONCURRENCY,
+#     tensor_parallel_size=1,
+#     gpu_memory_utilization=0.9,
+#     disable_mm_preprocessor_cache=True
+# )
 
 logits_processors = [NoRepeatNGramLogitsProcessor(ngram_size=20, window_size=50, whitelist_token_ids= {128821, 128822})] #window for fast；whitelist_token_ids: <td>,</td>
 
@@ -276,27 +277,24 @@ def process_single_image(image):
     return cache_item
 
 
-if __name__ == "__main__":
+def process_pdf(llm, input_path, output_path):
+    """fully process a single PDF and write the output to a .md file
 
-    parser = argparse.ArgumentParser(description="DeepSeek-OCR PDF Processing")
-    parser.add_argument("--input-path", type=str, required=True, help="Path to the input PDF file")
-    parser.add_argument("--output-path", type=str, required=True, help="Path to the output directory")
-    args = parser.parse_args()  
-
-
-    INPUT_PATH = args.input_path
-    OUTPUT_PATH = args.output_path
-
-    os.makedirs(OUTPUT_PATH, exist_ok=True)
-    os.makedirs(f'{OUTPUT_PATH}/images', exist_ok=True)
+    Args:
+        llm (LLM): An instantiated vLLM LLM object
+        input_path (str): path PDF file to convert
+        output_path (str): path to markdown output file
+    """
+    os.makedirs(output_path, exist_ok=True)
+    os.makedirs(f'{output_path}/images', exist_ok=True)
     
     print(f'{Colors.RED}PDF loading .....{Colors.RESET}')
 
 
-    images = pdf_to_images_high_quality(INPUT_PATH)
+    images = pdf_to_images_high_quality(input_path)
 
 
-    prompt = PROMPT
+    # prompt = PROMPT
 
     # batch_inputs = []
 
@@ -326,14 +324,10 @@ if __name__ == "__main__":
     )
 
 
-    output_path = OUTPUT_PATH
 
-    os.makedirs(output_path, exist_ok=True)
-
-
-    mmd_det_path = output_path + '/' + INPUT_PATH.split('/')[-1].replace('.pdf', '_det.mmd')
-    mmd_path = output_path + '/' + INPUT_PATH.split('/')[-1].replace('pdf', 'mmd')
-    pdf_out_path = output_path + '/' + INPUT_PATH.split('/')[-1].replace('.pdf', '_layouts.pdf')
+    mmd_det_path = output_path + '/' + input_path.split('/')[-1].replace('.pdf', '_det.mmd')
+    mmd_path = output_path + '/' + input_path.split('/')[-1].replace('pdf', 'mmd')
+    pdf_out_path = output_path + '/' + input_path.split('/')[-1].replace('.pdf', '_layouts.pdf')
     contents_det = ''
     contents = ''
     draw_images = []
@@ -348,7 +342,7 @@ if __name__ == "__main__":
                 continue
 
         
-        page_num = f'\n<--- Page Split --->'
+        # page_num = f'\n<--- Page Split --->'
 
         # contents_det += content + f'\n{page_num}\n'
 
@@ -382,4 +376,39 @@ if __name__ == "__main__":
 
 
     pil_to_pdf_img2pdf(draw_images, pdf_out_path)
+
+
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="DeepSeek-OCR PDF Processing")
+    parser.add_argument("--input-path", type=str, required=True, help="Path to the input PDF file")
+    parser.add_argument("--output-path", type=str, required=True, help="Path to the output directory")
+    args = parser.parse_args()  
+
+
+
+    llm = LLM(
+        model=MODEL_PATH,
+        hf_overrides={"architectures": ["DeepseekOCRForCausalLM"]},
+        block_size=256,
+        enforce_eager=False,
+        trust_remote_code=True, 
+        max_model_len=8192,
+        swap_space=0,
+        max_num_seqs=MAX_CONCURRENCY,
+        tensor_parallel_size=1,
+        gpu_memory_utilization=0.9,
+        disable_mm_preprocessor_cache=True
+    )
+
+    pdf_files = sorted(Path(args.input_dir).rglob("*.pdf"))
+    for pdf_path in pdf_files:
+        subdir_name = pdf_path.parent.name
+        out_subdir = Path(args.output_dir) / subdir_name
+        out_subdir.mkdir(parents=True, exist_ok=True)
+        process_pdf(llm, str(pdf_path), str(out_subdir))
+
+    
 
