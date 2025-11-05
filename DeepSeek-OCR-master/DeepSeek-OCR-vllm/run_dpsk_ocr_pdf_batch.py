@@ -4,6 +4,7 @@ import img2pdf
 import io
 import re
 import argparse
+import sys
 from pathlib import Path
 from tqdm import tqdm
 import torch
@@ -277,6 +278,26 @@ def process_single_image(image):
     return cache_item
 
 
+def check_not_empty(path):
+    """Check that a file exists and is not empty or whitespace-only."""
+    if not os.path.exists(path):
+        print(f"File not found: {path}")
+        return False
+
+    # Option 1: Simple size check
+    if os.path.getsize(path) == 0:
+        print(f"File is empty: {path}")
+        return False
+
+    # Option 2: Content check (not just whitespace)
+    with open(path, 'r', encoding='utf-8') as f:
+        if not f.read().strip():
+            print(f"File {path} contains only whitespace.")
+            return False
+
+    return True
+
+
 def process_pdf(llm, input_path, output_path):
     """fully process a single PDF and write the output to a .md file
 
@@ -373,6 +394,13 @@ def process_pdf(llm, input_path, output_path):
 
     with open(mmd_path, 'w', encoding='utf-8') as afile:
         afile.write(contents)
+
+
+    # Validate files
+    
+    if not check_not_empty(mmd_path):
+        print(f"Error: {mmd_path} is empty or missing.")
+        sys.exit(1)
 
 
     pil_to_pdf_img2pdf(draw_images, pdf_out_path)
