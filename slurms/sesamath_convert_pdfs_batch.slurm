@@ -2,9 +2,9 @@
 #SBATCH --job-name=deepseek-ocr-sesamath-test-modif
 #SBATCH --output=/home/users/lduignan/experiments/deepseek-ocr/results/logs/%x_%j.out
 #SBATCH --error=/home/users/lduignan/experiments/deepseek-ocr/results/logs/%x_%j.err
-#SBATCH --partition=gpu40G
+#SBATCH --partition=gpuh200p,gpuh100p,gpu80G,gpu40G
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=32
 #SBATCH --mem=128G
 #SBATCH --time=7-00:00:00
 

@@ -344,7 +344,7 @@ def process_pdf(llm, input_path, output_path):
         
         # page_num = f'\n<--- Page Split --->'
 
-        # contents_det += content + f'\n{page_num}\n'
+        contents_det += content #+ f'\n{page_num}\n'
 
         image_draw = img.copy()
 
@@ -363,7 +363,7 @@ def process_pdf(llm, input_path, output_path):
             content = content.replace(a_match_other, '').replace('\\coloneqq', ':=').replace('\\eqqcolon', '=:').replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')
 
 
-        #contents += content + f'\n{page_num}\n'
+        contents += content #+ f'\n{page_num}\n'
 
 
         jdx += 1
