@@ -399,8 +399,8 @@ def process_pdf(llm, input_path, output_path):
     # Validate files
     
     if not check_not_empty(mmd_path):
-        print(f"Error: {mmd_path} is empty or missing.")
-        sys.exit(1)
+        print(f"Warning: {mmd_path} is empty or missing.")
+        # sys.exit(1)
 
 
     pil_to_pdf_img2pdf(draw_images, pdf_out_path)
