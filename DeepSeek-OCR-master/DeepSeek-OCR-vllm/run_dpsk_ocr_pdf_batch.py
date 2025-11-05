@@ -280,14 +280,14 @@ def process_single_image(image):
 
 def check_not_empty(path):
     """Check that a file exists and is not empty or whitespace-only."""
-    if not os.path.exists(path):
-        print(f"File not found: {path}")
-        return False
+    # if not os.path.exists(path):
+    #     print(f"File not found: {path}")
+    #     return False
 
-    # Option 1: Simple size check
-    if os.path.getsize(path) == 0:
-        print(f"File is empty: {path}")
-        return False
+    # # Option 1: Simple size check
+    # if os.path.getsize(path) == 0:
+    #     print(f"File is empty: {path}")
+    #     return False
 
     # Option 2: Content check (not just whitespace)
     with open(path, 'r', encoding='utf-8') as f:
