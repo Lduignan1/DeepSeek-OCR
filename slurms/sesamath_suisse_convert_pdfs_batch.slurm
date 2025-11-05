@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=deepseek-ocr-sesamath
+#SBATCH --job-name=deepseek-ocr-sesamath-suisse
 #SBATCH --output=/home/users/lduignan/experiments/deepseek-ocr/results/logs/%x_%j.out
 #SBATCH --error=/home/users/lduignan/experiments/deepseek-ocr/results/logs/%x_%j.err
 #SBATCH --partition=gpuh200p,gpuh100p,gpu80G,gpu40G
@@ -17,8 +17,8 @@ conda activate deepseek-ocr
 
 
 # ---- Paths ----
-INPUT_DIR="/home/users/lduignan/projects/open-edu-4-data-gen/sources/sesamath/downloads" 
-OUTPUT_DIR="/home/users/lduignan/experiments/deepseek-ocr/sesamath"
+INPUT_DIR="/home/users/lduignan/projects/open-edu-4-data-gen/sources/sesamath/suisse_downloads" 
+OUTPUT_DIR="/home/users/lduignan/experiments/deepseek-ocr/sesamath_suisse"
 PYTHON_SCRIPT="/home/users/lduignan/projects/DeepSeek-OCR/DeepSeek-OCR-master/DeepSeek-OCR-vllm/run_dpsk_ocr_pdf_batch.py"
 
 
