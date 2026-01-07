@@ -28,8 +28,16 @@ echo "Starting OCR batch processing..."
 # ensure globs that match nothing expand to nothing
 shopt -s nullglob
 
-# process entries: either subdirectories or individual PDFs in INPUT_DIR
-for entry in "$INPUT_DIR"/*; do
+# collect entries and limit to first 5
+entries=( "$INPUT_DIR"/* )
+max_entries=5
+if [ "${#entries[@]}" -gt "$max_entries" ]; then
+    entries=( "${entries[@]:0:$max_entries}" )
+    echo "Limiting to first $max_entries entries in $INPUT_DIR"
+fi
+
+# process at most the first 5 entries
+for entry in "${entries[@]}"; do
     if [ -d "$entry" ]; then
         subdir="$entry"
         subdir_name=$(basename "$subdir")

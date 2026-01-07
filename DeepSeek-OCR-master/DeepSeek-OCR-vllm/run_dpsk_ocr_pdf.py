@@ -350,7 +350,7 @@ if __name__ == "__main__":
         
         page_num = f'\n<--- Page Split --->'
 
-        # contents_det += content + f'\n{page_num}\n'
+        contents_det += content + f'\n{page_num}\n'
 
         image_draw = img.copy()
 
@@ -369,7 +369,7 @@ if __name__ == "__main__":
             content = content.replace(a_match_other, '').replace('\\coloneqq', ':=').replace('\\eqqcolon', '=:').replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')
 
 
-        #contents += content + f'\n{page_num}\n'
+        contents += content + f'\n{page_num}\n'
 
 
         jdx += 1
@@ -381,5 +381,5 @@ if __name__ == "__main__":
         afile.write(contents)
 
 
-    pil_to_pdf_img2pdf(draw_images, pdf_out_path)
+    # pil_to_pdf_img2pdf(draw_images, pdf_out_path)
 
